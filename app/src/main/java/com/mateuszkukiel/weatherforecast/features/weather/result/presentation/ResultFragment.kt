@@ -13,6 +13,10 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ResultFragment : Fragment(R.layout.fragment_result) {
 
+    companion object {
+        const val BUNDLE_SEARCH_QUERY_KEY = "bundleSearchQueryKey"
+    }
+
     private val viewModel: ResultViewModel by viewModels()
 
     private val binding: FragmentResultBinding by viewBinding(FragmentResultBinding::bind)
@@ -22,6 +26,14 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
 
         binding.buttonSecond.setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        }
+
+        observeViewModel()
+    }
+
+    fun observeViewModel() {
+        viewModel.query.observe(viewLifecycleOwner) {
+            binding.textviewSecond.text = it
         }
     }
 
