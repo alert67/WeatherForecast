@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Weather Forecast</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_fragment_label">Search</string>
+    <string name="result_fragment_label">Result</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+</resources>
