@@ -6,10 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherApi {
-    companion object {
-        const val BASE_URL = "https://api.weatherapi.com/v1/"
-    }
-
     @GET("forecast.json")
     fun getForecast(
         @Query("q") query: String,

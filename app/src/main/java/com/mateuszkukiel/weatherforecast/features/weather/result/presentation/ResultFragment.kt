@@ -43,13 +43,16 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
 
     private fun observeViewModel() {
         viewModel.weather.observe(viewLifecycleOwner) { weather ->
-            binding.textError.visibility = View.GONE
-            binding.content.visibility = View.VISIBLE
 
-            binding.textResultLocationCountry.text = weather.location.country
-            binding.textResultLocationName.text = weather.location.name
-            binding.textResultLocationLatitude.text = weather.location.lat.toString()
-            binding.textResultLocationLongitude.text = weather.location.lon.toString()
+            with(binding) {
+                textError.visibility = View.GONE
+                content.visibility = View.VISIBLE
+
+                textResultLocationCountry.text = weather.location.country
+                textResultLocationName.text = weather.location.name
+                textResultLocationLatitude.text = weather.location.lat.toString()
+                textResultLocationLongitude.text = weather.location.lon.toString()
+            }
 
             hourAdapter.submitList(weather.hours.toList())
         }

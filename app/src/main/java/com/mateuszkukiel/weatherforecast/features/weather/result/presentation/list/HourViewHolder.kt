@@ -18,15 +18,17 @@ class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHo
     }
 
     fun bind(hour: Hour) {
-        Glide.with(binding.root).load("https:" + hour.condition.icon).into(binding.imageHour)
         val temp = hour.tempC.toString() + "°C"
-        binding.textHourTemp.text = temp
-        binding.textLocalTime.text = hour.localTime
-        binding.textWillItRain.text =
-            if (hour.willItRain) {
-                binding.root.context.getString(R.string.yes)
-            } else {
-                binding.root.context.getString(R.string.no)
-            }
+        with(binding) {
+            Glide.with(root).load("https:" + hour.condition.icon).into(imageHour)
+            textHourTemp.text = temp
+            textLocalTime.text = hour.localTime
+            textWillItRain.text =
+                if (hour.willItRain) {
+                    root.context.getString(R.string.yes)
+                } else {
+                    root.context.getString(R.string.no)
+                }
+        }
     }
 }

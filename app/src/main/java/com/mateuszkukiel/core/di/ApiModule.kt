@@ -2,6 +2,7 @@ package com.mateuszkukiel.core.di
 
 import com.mateuszkukiel.core.api.WeatherApi
 import com.mateuszkukiel.core.api.interceptors.ApiInterceptor
+import com.mateuszkukiel.weatherforecast.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,12 +21,17 @@ object ApiModule {
     @Singleton
     @Provides
     fun providesHttpLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        if (BuildConfig.DEBUG) {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
     }
 
     @Singleton
     @Provides
-    fun providesOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor, apiInterceptor: ApiInterceptor): OkHttpClient =
+    fun providesOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        apiInterceptor: ApiInterceptor
+    ): OkHttpClient =
         OkHttpClient
             .Builder()
             .addInterceptor(apiInterceptor)
@@ -37,7 +43,7 @@ object ApiModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-        .baseUrl(WeatherApi.BASE_URL)
+        .baseUrl(BuildConfig.apiUrl)
         .client(okHttpClient)
         .build()
 
