@@ -24,12 +24,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.searchField.editText?.doAfterTextChanged { editable ->
-            viewModel.validateInput(editable.toString())
+            viewModel.validateInputAndSetQuery(editable.toString())
         }
-
         binding.nextButton.setOnClickListener {
             goToResultFragment()
         }
+        binding.searchField.editText?.setText(viewModel.query)
 
         observeViewModel()
     }

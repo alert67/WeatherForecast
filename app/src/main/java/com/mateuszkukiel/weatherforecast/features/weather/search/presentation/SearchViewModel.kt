@@ -14,10 +14,13 @@ class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
+    var query = ""
+
     private val _isQueryValid: MutableLiveData<Boolean> = MutableLiveData()
     val isQueryValid: LiveData<Boolean> = _isQueryValid
 
-    fun validateInput(text: String) {
+    fun validateInputAndSetQuery(text: String) {
+        query = text
         _isQueryValid.value = searchQueryValidator.validate(text)
     }
 
