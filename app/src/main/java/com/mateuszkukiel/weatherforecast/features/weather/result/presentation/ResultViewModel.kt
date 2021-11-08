@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.hadilq.liveevent.LiveEvent
 import com.mateuszkukiel.core.base.UiState
+import com.mateuszkukiel.core.exception.ErrorMapper
 import com.mateuszkukiel.weatherforecast.features.weather.domain.GetWeatherForecastUseCase
 import com.mateuszkukiel.weatherforecast.features.weather.domain.RefreshWeatherForecastUseCase
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Weather
@@ -17,6 +19,7 @@ import javax.inject.Inject
 class ResultViewModel @Inject constructor(
     private val getWeatherForecastUseCase: GetWeatherForecastUseCase,
     private val refreshWeatherForecastUseCase: RefreshWeatherForecastUseCase,
+    private val errorMapper: ErrorMapper,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -27,6 +30,9 @@ class ResultViewModel @Inject constructor(
 
     private val _weather: MutableLiveData<Weather> = MutableLiveData()
     val weather: LiveData<Weather> = _weather
+
+    private val _errorMessage: LiveEvent<String> = LiveEvent()
+    val errorMessage: LiveData<String> = _errorMessage
 
     init {
         savedStateHandle.get<String>(ResultFragment.BUNDLE_SEARCH_QUERY_KEY)?.let { query ->
@@ -49,6 +55,7 @@ class ResultViewModel @Inject constructor(
                     _uiState.value = UiState.Idle
                 }, onError = {
                     _uiState.value = UiState.Idle
+                    _errorMessage.value = errorMapper.map(it)
                 }
             )
     }
@@ -56,12 +63,8 @@ class ResultViewModel @Inject constructor(
     private fun getWeatherForecast(query: String) {
         getWeatherForecastUseCase.execute(query)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(
-                onNext = { weather ->
-                    _weather.value = weather
-                }, onError = {
-
-                }
-            )
+            .subscribeBy { weather ->
+                _weather.value = weather
+            }
     }
 }

@@ -1,19 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeToRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".features.weather.result.presentation.ResultFragment">
 
-    <TextView
-        android:id="@+id/textview_second"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Result"
-        app:layout_constraintBottom_toTopOf="@id/button_second"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="22sp"
+            android:visibility="visible"
+            tools:text="Error" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageResultLocation"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_low"
+                android:src="@drawable/ic_location_24"
+                app:layout_constraintBottom_toBottomOf="@+id/labelResultLocationColon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textResultLocationName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_low"
+                android:layout_marginTop="@dimen/margin_low"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageResultLocation"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Bialystok" />
+
+            <TextView
+                android:id="@+id/textResultLocationCountry"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/textResultLocationName"
+                app:layout_constraintStart_toStartOf="@+id/textResultLocationName"
+                app:layout_constraintTop_toBottomOf="@+id/textResultLocationName"
+                tools:text="Poland" />
+
+            <TextView
+                android:id="@+id/textResultLocationLatitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/labelResultLocationColon"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@+id/textResultLocationCountry"
+                app:layout_constraintTop_toBottomOf="@+id/textResultLocationCountry"
+                tools:text="12.22" />
+
+            <TextView
+                android:id="@+id/labelResultLocationColon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
+                android:text="@string/colon"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/textResultLocationLongitude"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textResultLocationLatitude"
+                app:layout_constraintTop_toBottomOf="@+id/textResultLocationCountry" />
+
+            <TextView
+                android:id="@+id/textResultLocationLongitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/textResultLocationCountry"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/labelResultLocationColon"
+                app:layout_constraintTop_toBottomOf="@+id/textResultLocationCountry"
+                tools:text="12.22" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewResultHours"
+                android:layout_width="match_parent"
+                android:paddingHorizontal="@dimen/margin_normal"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_low"
+                android:layout_marginBottom="@dimen/margin_low"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/labelResultLocationColon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

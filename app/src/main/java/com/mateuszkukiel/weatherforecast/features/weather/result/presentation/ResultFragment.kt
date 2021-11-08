@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.mateuszkukiel.core.base.UiState
 import com.mateuszkukiel.core.base.viewBinding
 import com.mateuszkukiel.weatherforecast.R
 import com.mateuszkukiel.weatherforecast.databinding.FragmentResultBinding
+import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.list.HourListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,20 +25,45 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
 
     private val binding: FragmentResultBinding by viewBinding(FragmentResultBinding::bind)
 
+    private val hourAdapter: HourListAdapter by lazy {
+        HourListAdapter()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        binding.swipeToRefresh.setOnRefreshListener {
+            viewModel.refreshData()
         }
+        binding.recyclerViewResultHours.layoutManager = LinearLayoutManager(context)
+        binding.recyclerViewResultHours.adapter = hourAdapter
 
         observeViewModel()
     }
 
-    fun observeViewModel() {
-        viewModel.query.observe(viewLifecycleOwner) {
-            binding.textviewSecond.text = it
+    private fun observeViewModel() {
+        viewModel.weather.observe(viewLifecycleOwner) { weather ->
+            binding.textError.visibility = View.GONE
+            binding.content.visibility = View.VISIBLE
+
+            binding.textResultLocationCountry.text = weather.location.country
+            binding.textResultLocationName.text = weather.location.name
+            binding.textResultLocationLatitude.text = weather.location.lat.toString()
+            binding.textResultLocationLongitude.text = weather.location.lon.toString()
+
+            hourAdapter.submitList(weather.hours.toList())
         }
+        viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+            binding.textError.text = errorMessage
+            showSnackbar(errorMessage)
+        }
+        viewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+            binding.swipeToRefresh.isRefreshing = uiState is UiState.Pending
+        }
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
     }
 
 }
