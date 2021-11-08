@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.mateuszkukiel.core.base.viewBinding
@@ -22,8 +23,20 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.searchField.editText?.doAfterTextChanged { editable ->
+            viewModel.validateInput(editable.toString())
+        }
+
         binding.nextButton.setOnClickListener {
             goToResultFragment()
+        }
+
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
+        viewModel.isQueryValid.observe(viewLifecycleOwner) { isValid ->
+            binding.nextButton.isEnabled = isValid
         }
     }
 

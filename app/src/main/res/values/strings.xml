@@ -13,5 +13,13 @@
     <string name="item_hour_location_will_it_rain_label">Will it rain:</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="search_hint">Location</string>
+    <string name="search_label_title">Search for weather</string>
+    <string name="search_label_instruction">
+        Input can take following parameters:\n
+        - Latitude and Longitude e.g: q=48.8567,2.3508\n
+        - city name e.g.: q=Paris\n
+        - US zip e.g.: q=10001\n
+    </string>
 
 </resources>

@@ -12,4 +12,10 @@
     <dimen name="margin_high">
         36dp
     </dimen>
+
+    <dimen name="font_larger">22sp</dimen>
+    <dimen name="font_large">20sp</dimen>
+    <dimen name="font_normal">16sp</dimen>
+    <dimen name="font_small">12sp</dimen>
+
 </resources>

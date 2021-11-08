@@ -23,8 +23,10 @@ class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHo
         binding.textHourTemp.text = temp
         binding.textLocalTime.text = hour.localTime
         binding.textWillItRain.text =
-            if (hour.willItRain) binding.root.context.getString(R.string.yes) else binding.root.context.getString(
-                R.string.no
-            )
+            if (hour.willItRain) {
+                binding.root.context.getString(R.string.yes)
+            } else {
+                binding.root.context.getString(R.string.no)
+            }
     }
 }
