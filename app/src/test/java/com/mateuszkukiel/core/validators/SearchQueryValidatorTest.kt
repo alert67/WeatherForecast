@@ -25,7 +25,7 @@ internal class SearchQueryValidatorTest {
     fun `invalid cities returns false`() {
         assertFalse(searchQueryValidator.validate("Białystok"))
         assertFalse(searchQueryValidator.validate("he"))
-        assertFalse(searchQueryValidator.validate("new-york"))
+        assertFalse(searchQueryValidator.validate("new--york"))
     }
 
     @Test
