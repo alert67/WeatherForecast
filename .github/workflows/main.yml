@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Access secrets
+        env:
+          APIKEY: $
+          APIURL: $
+        run: echo apiKey=\"$APIKEY\" apiUrl=\"$APIURL\"  > ./local.properties
       - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
