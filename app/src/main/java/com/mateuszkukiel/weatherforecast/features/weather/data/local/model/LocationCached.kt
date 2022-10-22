@@ -21,4 +21,6 @@ data class LocationCached(
         lat = lat,
         lon = lon
     )
+
+    companion object
 }

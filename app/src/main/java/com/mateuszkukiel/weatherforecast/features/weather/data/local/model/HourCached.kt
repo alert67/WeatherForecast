@@ -46,4 +46,6 @@ data class HourCached(
         willItRain = willItRain,
         condition = condition.toCondition()
     )
+
+    companion object
 }

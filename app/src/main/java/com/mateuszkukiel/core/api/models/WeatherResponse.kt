@@ -11,4 +11,6 @@ data class WeatherResponse(
         location = location.toLocation(),
         hours = forecast.getHours()
     )
+
+    companion object
 }

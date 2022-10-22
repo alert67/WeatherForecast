@@ -19,4 +19,6 @@ data class LocationRemote(
         lat = lat,
         lon = lon
     )
+
+    companion object
 }

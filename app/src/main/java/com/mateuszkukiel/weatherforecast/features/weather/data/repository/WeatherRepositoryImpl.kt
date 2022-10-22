@@ -5,6 +5,7 @@ import com.mateuszkukiel.core.exception.ErrorWrapper
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.WeatherDao
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourCached
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherWithHours
 import com.mateuszkukiel.weatherforecast.features.weather.domain.WeatherRepository
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Weather
 import io.reactivex.rxjava3.core.Completable

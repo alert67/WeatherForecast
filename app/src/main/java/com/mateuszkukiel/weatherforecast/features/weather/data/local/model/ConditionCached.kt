@@ -15,4 +15,6 @@ data class ConditionCached (
         text = text,
         icon = icon
     )
+
+    companion object
 }
