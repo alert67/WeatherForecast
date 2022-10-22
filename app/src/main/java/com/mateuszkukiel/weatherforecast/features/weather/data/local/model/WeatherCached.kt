@@ -14,4 +14,6 @@ data class WeatherCached (
         query = query,
         location = LocationCached(weather.location)
     )
+
+    companion object
 }

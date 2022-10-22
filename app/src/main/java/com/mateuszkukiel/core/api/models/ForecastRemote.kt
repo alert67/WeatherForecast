@@ -8,13 +8,17 @@ data class ForecastRemote(
 ) {
     fun getHours(): List<Hour> =
         forecastday.flatMap { remoteDay -> remoteDay.hour.map { remoteHour -> remoteHour.toHour() } }
+
+    companion object
 }
 
 data class ForecastDayRemote(
     @SerializedName("date") val date: String,
     @SerializedName("date_epoch") val dateEpoch: Int,
     @SerializedName("hour") val hour: List<HourRemote>
-)
+) {
+    companion object
+}
 
 data class HourRemote(
     @SerializedName("time_epoch") val timeEpoch: Int,
@@ -59,4 +63,6 @@ data class HourRemote(
         willItRain = willItRain >= 1,
         condition = condition.toCondition()
     )
+
+    companion object
 }

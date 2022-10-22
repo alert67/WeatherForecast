@@ -12,4 +12,6 @@ data class ConditionRemote(
         text = text,
         icon = icon
     )
+
+    companion object
 }

@@ -21,4 +21,6 @@ data class WeatherWithHours(
         location = weatherCached.location.toLocation(),
         hours = hours.map { hourCached -> hourCached.toHour() }
     )
+
+    companion object
 }
