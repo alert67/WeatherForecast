@@ -22,14 +22,14 @@ class MarginItemDecoration(
                 if (position != 0) {
                     bottom = spaceSize
                 }
-                if (position != itemCount) {
+                if (position != itemCount - 1) {
                     top = spaceSize
                 }
             } else {
                 if (position != 0) {
                     left = spaceSize
                 }
-                if (position != itemCount) {
+                if (position != itemCount - 1) {
                     right = spaceSize
                 }
             }
