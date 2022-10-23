@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.mateuszkukiel.core.base.BaseViewModel
 import com.mateuszkukiel.core.exception.ErrorMapper
 import com.mateuszkukiel.weatherforecast.features.weather.domain.ValidateSearchQueryUseCase
 import com.mateuszkukiel.weatherforecast.features.weather.search.presentation.model.SearchViewActions
@@ -12,6 +13,7 @@ import com.mateuszkukiel.weatherforecast.features.weather.search.presentation.mo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -23,7 +25,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val searchQueryUseCase: ValidateSearchQueryUseCase,
     private val errorMapper: ErrorMapper
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _viewState: MutableLiveData<SearchViewState> = MutableLiveData(SearchViewState())
     val viewState: LiveData<SearchViewState> = _viewState
@@ -83,6 +85,6 @@ class SearchViewModel @Inject constructor(
                         searchQueryError = errorMapper.map(error)
                     )
                 }
-            )
+            ).addTo(disposables)
     }
 }
