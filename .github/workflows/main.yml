@@ -6,7 +6,7 @@ on:
     branches: [ main ]
     
 jobs:
-  ANDROID_BASE_CHECKS:
+  build:
     name: Base checks
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +25,7 @@ jobs:
         run: chmod +x gradlew    
       - name: Perform build
         run: ./gradlew build
-  ANDROID_UNIT_TESTS:
+  test:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
