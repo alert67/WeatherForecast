@@ -3,14 +3,13 @@ package com.mateuszkukiel.weatherforecast.features.weather.result.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.mateuszkukiel.core.base.BaseViewModel
 import com.mateuszkukiel.core.base.UiState
 import com.mateuszkukiel.core.exception.ErrorMapper
 import com.mateuszkukiel.weatherforecast.features.weather.domain.GetWeatherForecastUseCase
 import com.mateuszkukiel.weatherforecast.features.weather.domain.RefreshWeatherForecastUseCase
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Weather
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.WeatherQuery
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
@@ -30,8 +29,8 @@ class ResultViewModel @Inject constructor(
     private val _uiState: MutableLiveData<UiState> = MutableLiveData(UiState.Idle)
     val uiState: LiveData<UiState> = _uiState
 
-    private val _weather: MutableLiveData<Weather> = MutableLiveData()
-    val weather: LiveData<Weather> = _weather
+    private val _locationQuery: MutableLiveData<WeatherQuery> = MutableLiveData()
+    val locationQuery: LiveData<WeatherQuery> = _locationQuery
 
     private val _errorMessage: LiveEvent<String> = LiveEvent()
     val errorMessage: LiveData<String> = _errorMessage
@@ -66,7 +65,7 @@ class ResultViewModel @Inject constructor(
         getWeatherForecastUseCase.execute(query)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy { weather ->
-                _weather.value = weather
+                _locationQuery.value = weather
             }.addTo(disposables)
     }
 }

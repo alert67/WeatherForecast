@@ -1,21 +1,74 @@
 package com.mateuszkukiel.core.api.models
 
 import com.google.gson.annotations.SerializedName
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Hour
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.DayWeather
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.HourWeather
 
 data class ForecastRemote(
     @SerializedName("forecastday") val forecastday: List<ForecastDayRemote>
 ) {
-    fun getHours(): List<Hour> =
-        forecastday.flatMap { remoteDay -> remoteDay.hour.map { remoteHour -> remoteHour.toHour() } }
-
     companion object
 }
 
 data class ForecastDayRemote(
     @SerializedName("date") val date: String,
     @SerializedName("date_epoch") val dateEpoch: Int,
+    @SerializedName("day") val dayRemote: DayRemote,
     @SerializedName("hour") val hour: List<HourRemote>
+) {
+    companion object
+
+    fun toDayWeather() = DayWeather(
+        localTime = date,
+        tempC = dayRemote.avgtempC,
+        dailyWillItRain = dayRemote.dailyWillItRain > 1,
+        dailyChanceOfRain = dayRemote.dailyChanceOfRain,
+        condition = dayRemote.conditionRemote.toCondition(),
+        hoursWeather = hour.map { it.toHour() }
+    )
+}
+
+data class DayRemote(
+    @SerializedName("avghumidity")
+    val avghumidity: Double,
+    @SerializedName("avgtemp_c")
+    val avgtempC: Double,
+    @SerializedName("avgtemp_f")
+    val avgtempF: Double,
+    @SerializedName("avgvis_km")
+    val avgvisKm: Double,
+    @SerializedName("avgvis_miles")
+    val avgvisMiles: Double,
+    @SerializedName("condition")
+    val conditionRemote: ConditionRemote,
+    @SerializedName("daily_chance_of_rain")
+    val dailyChanceOfRain: Int,
+    @SerializedName("daily_chance_of_snow")
+    val dailyChanceOfSnow: Int,
+    @SerializedName("daily_will_it_rain")
+    val dailyWillItRain: Int,
+    @SerializedName("daily_will_it_snow")
+    val dailyWillItSnow: Int,
+    @SerializedName("maxtemp_c")
+    val maxtempC: Double,
+    @SerializedName("maxtemp_f")
+    val maxtempF: Double,
+    @SerializedName("maxwind_kph")
+    val maxwindKph: Double,
+    @SerializedName("maxwind_mph")
+    val maxwindMph: Double,
+    @SerializedName("mintemp_c")
+    val mintempC: Double,
+    @SerializedName("mintemp_f")
+    val mintempF: Double,
+    @SerializedName("totalprecip_in")
+    val totalprecipIn: Double,
+    @SerializedName("totalprecip_mm")
+    val totalprecipMm: Double,
+    @SerializedName("totalsnow_cm")
+    val totalsnowCm: Double,
+    @SerializedName("uv")
+    val uv: Double
 ) {
     companion object
 }
@@ -26,7 +79,7 @@ data class HourRemote(
     @SerializedName("temp_c") val tempC: Double,
     @SerializedName("temp_f") val tempF: Double,
     @SerializedName("is_day") val isDay: Int,
-    @SerializedName("condition") val condition: ConditionRemote,
+    @SerializedName("condition") val conditionRemote: ConditionRemote,
     @SerializedName("wind_mph") val windMph: Double,
     @SerializedName("wind_kph") val windKph: Double,
     @SerializedName("wind_degree") val windDegree: Int,
@@ -55,13 +108,13 @@ data class HourRemote(
     @SerializedName("gust_kph") val gustKph: Double,
     @SerializedName("uv") val uv: Double
 ) {
-    fun toHour() = Hour(
+    fun toHour() = HourWeather(
         localTime = time,
         tempC = tempC,
         feelsTempC = feelslikeC,
         isDay = isDay >= 1,
         willItRain = willItRain >= 1,
-        condition = condition.toCondition()
+        condition = conditionRemote.toCondition()
     )
 
     companion object

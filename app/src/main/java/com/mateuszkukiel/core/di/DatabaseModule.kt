@@ -3,6 +3,7 @@ package com.mateuszkukiel.core.di
 import android.content.Context
 import androidx.room.Room
 import com.mateuszkukiel.core.database.AppDatabase
+import com.mateuszkukiel.core.database.migrations.Migration1To2
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.WeatherDao
 
 import dagger.Module
@@ -28,6 +29,6 @@ object DatabaseModule {
             appContext,
             AppDatabase::class.java,
             "AppDatabase"
-        ).build()
+        ).addMigrations(Migration1To2()).build()
     }
 }

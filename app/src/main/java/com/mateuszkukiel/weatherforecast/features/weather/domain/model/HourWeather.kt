@@ -1,6 +1,6 @@
 package com.mateuszkukiel.weatherforecast.features.weather.domain.model
 
-data class Hour(
+data class HourWeather(
     val localTime: String,
     val tempC: Double,
     val feelsTempC: Double,

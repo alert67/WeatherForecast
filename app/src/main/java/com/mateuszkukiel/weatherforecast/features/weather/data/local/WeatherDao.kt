@@ -1,19 +1,30 @@
 package com.mateuszkukiel.weatherforecast.features.weather.data.local
 
 import androidx.room.*
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourCached
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherCached
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherWithHours
-import io.reactivex.rxjava3.core.Completable
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.ConditionCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.DayWeatherCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourWeatherCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherQueryCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.selector.WeatherQueryCachedSelector
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
 abstract class WeatherDao {
 
     @Transaction
-    @Query("SELECT * FROM WeatherCached WHERE `query` = :query")
-    abstract fun getWeatherByQuery(query: String): Flowable<WeatherWithHours>
+    @Query("SELECT * FROM WeatherQueryCached WHERE `query` = :query")
+    abstract fun getWeatherByQuery(query: String): Flowable<WeatherQueryCachedSelector>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insertWeatherWithHours(weatherCached: WeatherCached, hours: List<HourCached>)
+    abstract fun insertWeatherQuery(weatherQueryCached: WeatherQueryCached)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertConditions(conditions: List<ConditionCached>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertDayWeather(dayWeatherCached: DayWeatherCached): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertHoursWeather(hoursWeatherCached: List<HourWeatherCached>)
+
 }

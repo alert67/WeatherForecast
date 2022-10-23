@@ -1,5 +1,6 @@
 package com.mateuszkukiel.mock
 
+import com.mateuszkukiel.core.api.models.ConditionRemote
 import com.mateuszkukiel.core.api.models.*
 import org.jetbrains.annotations.TestOnly
 
@@ -23,14 +24,47 @@ fun LocationRemote.Companion.mock() = LocationRemote(
 
 @TestOnly
 fun ForecastRemote.Companion.mock() = ForecastRemote(
-    forecastday = listOf(ForecastDayRemote.Companion.mock(), ForecastDayRemote.Companion.mock(), ForecastDayRemote.Companion.mock())
+    forecastday = listOf(
+        ForecastDayRemote.Companion.mock(),
+        ForecastDayRemote.Companion.mock(),
+        ForecastDayRemote.Companion.mock()
+    )
 )
 
 @TestOnly
 fun ForecastDayRemote.Companion.mock() = ForecastDayRemote(
     date = "date",
     dateEpoch = 2,
-    hour = listOf(HourRemote.Companion.mock(), HourRemote.Companion.mock(), HourRemote.Companion.mock())
+    dayRemote = DayRemote.Companion.mock(),
+    hour = listOf(
+        HourRemote.Companion.mock(),
+        HourRemote.Companion.mock(),
+        HourRemote.Companion.mock()
+    )
+)
+
+@TestOnly
+fun DayRemote.Companion.mock() = DayRemote(
+    avghumidity = 12.12,
+    avgtempC = 11.11,
+    avgtempF = 77.77,
+    avgvisKm = 1.2,
+    avgvisMiles = 0.4,
+    conditionRemote = ConditionRemote.Companion.mock(),
+    dailyChanceOfRain = 1,
+    dailyChanceOfSnow = 3,
+    dailyWillItRain = 0,
+    dailyWillItSnow = 0,
+    maxtempC = 12.2,
+    maxtempF = 77.77,
+    mintempC = 11.2,
+    mintempF = 75.75,
+    totalsnowCm = 1.2,
+    maxwindMph = 12.32,
+    maxwindKph = 14.23,
+    totalprecipIn = 11.03,
+    totalprecipMm = 11.11,
+    uv = 4.0
 )
 
 @TestOnly
@@ -40,7 +74,7 @@ fun HourRemote.Companion.mock() = HourRemote(
     tempC = 2.1,
     tempF = 77.2,
     isDay = 1,
-    condition = ConditionRemote.mock(),
+    conditionRemote = ConditionRemote.Companion.mock(),
     windMph = 12.1,
     windKph = 11.1,
     windDegree = 2,

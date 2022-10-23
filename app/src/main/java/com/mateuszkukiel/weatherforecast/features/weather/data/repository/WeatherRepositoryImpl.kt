@@ -3,13 +3,15 @@ package com.mateuszkukiel.weatherforecast.features.weather.data.repository
 import com.mateuszkukiel.core.api.WeatherApi
 import com.mateuszkukiel.core.exception.ErrorWrapper
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.WeatherDao
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourCached
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherCached
-import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherWithHours
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.ConditionCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.DayWeatherCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourWeatherCached
+import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherQueryCached
 import com.mateuszkukiel.weatherforecast.features.weather.domain.WeatherRepository
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Weather
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.WeatherQuery
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -17,31 +19,52 @@ class WeatherRepositoryImpl @Inject constructor(
     private val weatherDao: WeatherDao,
     private val errorWrapper: ErrorWrapper
 ) : WeatherRepository {
-    override fun getWeather(query: String): Observable<Weather> {
+    override fun getWeather(query: String): Observable<WeatherQuery> {
         return weatherDao.getWeatherByQuery(query)
-            .map { weatherWithHours -> weatherWithHours.toWeather() }
+            .map { weatherQuerySelector -> weatherQuerySelector.toWeatherQuery() }
             .toObservable()
     }
 
     override fun refreshWeather(query: String): Completable {
-        return Completable.fromObservable(getWeatherFromRemote(query)
-            .doOnNext { weather ->
-                insertWeatherToLocal(query, weather)
-            })
-    }
-
-    private fun getWeatherFromRemote(query: String): Observable<Weather> {
-        return api.getForecast(query)
-            .map { weatherResponse -> weatherResponse.toWeather() }
-            .toObservable()
-            .onErrorResumeNext { throwable ->
-                Observable.error(errorWrapper.wrap(throwable))
+        return getWeatherFromRemote(query)
+            .flatMapCompletable { weatherQuery ->
+                insertWeatherToLocal(weatherQuery)
             }
     }
 
-    private fun insertWeatherToLocal(query: String, weather: Weather) {
-        weatherDao.insertWeatherWithHours(
-            WeatherCached(query, weather),
-            weather.hours.map { hour -> HourCached(query, hour) })
+    private fun getWeatherFromRemote(query: String): Single<WeatherQuery> {
+        return api.getForecast(query)
+            .map { weatherResponse -> weatherResponse.toLocationQuery(query) }
+            .onErrorResumeNext { throwable ->
+                Single.error(errorWrapper.wrap(throwable))
+            }
+    }
+
+    private fun insertWeatherToLocal(weatherQuery: WeatherQuery): Completable {
+        return Completable.fromAction {
+            //insert weather query
+            val weatherQueryCached = WeatherQueryCached(weatherQuery)
+            weatherDao.insertWeatherQuery(weatherQueryCached)
+
+            //insert conditions
+            val conditionsCached: MutableList<ConditionCached> = mutableListOf()
+            conditionsCached.addAll(weatherQuery.daysWeather.map { ConditionCached(it.condition) })
+            conditionsCached.addAll(weatherQuery.daysWeather.flatMap { day ->
+                day.hoursWeather.map { hour ->
+                    ConditionCached(
+                        hour.condition
+                    )
+                }
+            })
+            weatherDao.insertConditions(conditionsCached.toSet().toList())
+
+            // insert days with hours
+            weatherQuery.daysWeather.forEach { day ->
+                val dayCached = DayWeatherCached(weatherQuery.query, day)
+                val dayCachedRoomId = weatherDao.insertDayWeather(dayCached).toInt()
+                val hoursCached = day.hoursWeather.map { HourWeatherCached(dayCachedRoomId, it) }
+                weatherDao.insertHoursWeather(hoursCached)
+            }
+        }
     }
 }

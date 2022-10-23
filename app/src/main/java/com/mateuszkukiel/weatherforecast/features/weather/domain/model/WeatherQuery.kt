@@ -1,8 +1,10 @@
 package com.mateuszkukiel.weatherforecast.features.weather.domain.model
 
-data class Location(
+data class WeatherQuery(
+    val query: String,
     val name: String,
     val country: String,
     val lat: Double,
-    val lon: Double
+    val lon: Double,
+    val daysWeather: List<DayWeather>
 )

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.mateuszkukiel.core.base.UiState
@@ -42,19 +41,19 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
     }
 
     private fun observeViewModel() {
-        viewModel.weather.observe(viewLifecycleOwner) { weather ->
+        viewModel.locationQuery.observe(viewLifecycleOwner) { weather ->
 
             with(binding) {
                 textError.visibility = View.GONE
                 content.visibility = View.VISIBLE
 
-                textResultLocationCountry.text = weather.location.country
-                textResultLocationName.text = weather.location.name
-                textResultLocationLatitude.text = weather.location.lat.toString()
-                textResultLocationLongitude.text = weather.location.lon.toString()
+                textResultLocationCountry.text = weather.country
+                textResultLocationName.text = weather.name
+                textResultLocationLatitude.text = weather.lat.toString()
+                textResultLocationLongitude.text = weather.lon.toString()
             }
 
-            hourAdapter.submitList(weather.hours.toList())
+            hourAdapter.submitList(weather.daysWeather.flatMap { day -> day.hoursWeather })
         }
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.textError.text = errorMessage

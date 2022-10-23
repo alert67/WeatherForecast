@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mateuszkukiel.weatherforecast.R
 import com.mateuszkukiel.weatherforecast.databinding.ItemHourBinding
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Hour
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.HourWeather
 
 class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
@@ -17,14 +17,14 @@ class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHo
         }
     }
 
-    fun bind(hour: Hour) {
-        val temp = hour.tempC.toString() + "°C"
+    fun bind(hourWeather: HourWeather) {
+        val temp = hourWeather.tempC.toString() + "°C"
         with(binding) {
-            Glide.with(root).load("https:" + hour.condition.icon).into(imageHour)
+            Glide.with(root).load("https:" + hourWeather.condition.icon).into(imageHour)
             textHourTemp.text = temp
-            textLocalTime.text = hour.localTime
+            textLocalTime.text = hourWeather.localTime
             textWillItRain.text =
-                if (hour.willItRain) {
+                if (hourWeather.willItRain) {
                     root.context.getString(R.string.yes)
                 } else {
                     root.context.getString(R.string.no)
