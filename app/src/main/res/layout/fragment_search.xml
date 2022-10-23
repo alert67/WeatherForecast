@@ -10,11 +10,11 @@
         android:id="@+id/labelSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_low"
-        android:layout_marginEnd="@dimen/margin_normal"
-        android:textColor="?android:textColorPrimary"
+        android:layout_marginStart="@dimen/margin_high"
+        android:layout_marginTop="@dimen/margin_standard"
+        android:layout_marginEnd="@dimen/margin_high"
         android:text="@string/search_label_title"
+        android:textColor="?android:textColorPrimary"
         android:textSize="@dimen/font_large"
         app:layout_constraintBottom_toTopOf="@+id/textInputSearch"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +28,8 @@
         android:id="@+id/labelSearchInstruction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginEnd="@dimen/margin_normal"
+        android:layout_marginStart="@dimen/margin_high"
+        android:layout_marginEnd="@dimen/margin_high"
         android:text="@string/search_label_instruction"
         android:textColor="?android:textColorSecondary"
         android:textSize="@dimen/font_normal"
@@ -43,26 +43,26 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputSearch"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:layout_marginEnd="@dimen/margin_normal"
-        app:startIconDrawable="@drawable/ic_location_24"
+        android:layout_marginStart="@dimen/margin_high"
+        android:layout_marginTop="@dimen/margin_high"
+        android:layout_marginEnd="@dimen/margin_high"
         android:hint="@string/search_hint"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:layout_constraintBottom_toTopOf="@+id/nextButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelSearchInstruction">
+        app:layout_constraintTop_toBottomOf="@+id/labelSearchInstruction"
+        app:startIconDrawable="@drawable/ic_location_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextSearch"
-            android:maxLines="1"
-            android:maxLength="30"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:maxLength="30"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,9 +70,9 @@
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:text="@string/next"
+        android:layout_marginTop="@dimen/margin_high"
         android:enabled="false"
+        android:text="@string/next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

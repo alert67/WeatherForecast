@@ -10,7 +10,7 @@ import com.mateuszkukiel.core.base.UiState
 import com.mateuszkukiel.core.base.viewBinding
 import com.mateuszkukiel.weatherforecast.R
 import com.mateuszkukiel.weatherforecast.databinding.FragmentResultBinding
-import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.list.HourListAdapter
+import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.list.DayWeatherListAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,8 +24,8 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
 
     private val binding: FragmentResultBinding by viewBinding(FragmentResultBinding::bind)
 
-    private val hourAdapter: HourListAdapter by lazy {
-        HourListAdapter()
+    private val daysAdapter: DayWeatherListAdapter by lazy {
+        DayWeatherListAdapter()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
             viewModel.refreshData()
         }
         binding.recyclerViewResultHours.layoutManager = LinearLayoutManager(context)
-        binding.recyclerViewResultHours.adapter = hourAdapter
+        binding.recyclerViewResultHours.adapter = daysAdapter
 
         observeViewModel()
     }
@@ -53,7 +53,7 @@ class ResultFragment : Fragment(R.layout.fragment_result) {
                 textResultLocationLongitude.text = weather.lon.toString()
             }
 
-            hourAdapter.submitList(weather.daysWeather.flatMap { day -> day.hoursWeather })
+            daysAdapter.submitList(weather.daysWeather)
         }
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             binding.textError.text = errorMessage
