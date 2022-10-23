@@ -4,14 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mateuszkukiel.weatherforecast.R
 import com.mateuszkukiel.weatherforecast.databinding.ItemHourBinding
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.HourWeather
 
-class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHolder(binding.root) {
+class HourWeatherViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHolder(binding.root) {
     companion object {
-        fun inflate(parent: ViewGroup): HourViewHolder {
-            return HourViewHolder(
+        fun inflate(parent: ViewGroup): HourWeatherViewHolder {
+            return HourWeatherViewHolder(
                 ItemHourBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
@@ -23,12 +22,6 @@ class HourViewHolder(private val binding: ItemHourBinding) : RecyclerView.ViewHo
             Glide.with(root).load("https:" + hourWeather.condition.icon).into(imageHour)
             textHourTemp.text = temp
             textLocalTime.text = hourWeather.localTime
-            textWillItRain.text =
-                if (hourWeather.willItRain) {
-                    root.context.getString(R.string.yes)
-                } else {
-                    root.context.getString(R.string.no)
-                }
         }
     }
 }

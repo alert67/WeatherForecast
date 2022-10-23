@@ -1,84 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="140dp"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginVertical="4dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?android:textColorPrimary"
     app:cardElevation="3dp"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageHour"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="@dimen/margin_high"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textHourTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_very_low"
-            android:layout_marginTop="@dimen/margin_very_low"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/font_large"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageHour"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageHour"
+            app:layout_constraintTop_toBottomOf="@+id/imageHour"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="22°C" />
 
-        <ImageView
-            android:id="@+id/imageHour"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="@dimen/margin_very_low"
-            android:layout_marginTop="@dimen/margin_very_low"
-            android:layout_marginBottom="@dimen/margin_very_low"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textHourTemp"
-            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textLocalTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_very_low"
-            android:layout_marginTop="@dimen/margin_very_low"
-            android:layout_marginEnd="@dimen/margin_very_low"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="@dimen/font_normal"
-            app:layout_constraintBottom_toTopOf="@+id/labelWillItRain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textHourTemp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="Time" />
-
-        <TextView
-            android:id="@+id/labelWillItRain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_very_low"
-            android:layout_marginBottom="@dimen/margin_very_low"
-            android:text="@string/item_hour_location_will_it_rain_label"
+            android:layout_marginBottom="@dimen/margin_high"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/font_normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textLocalTime"
-            app:layout_constraintTop_toBottomOf="@+id/textLocalTime" />
-
-        <TextView
-            android:id="@+id/textWillItRain"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="@dimen/font_normal"
-            app:layout_constraintBottom_toBottomOf="@+id/labelWillItRain"
-            app:layout_constraintEnd_toEndOf="@+id/textLocalTime"
-            app:layout_constraintStart_toEndOf="@+id/labelWillItRain"
-            app:layout_constraintTop_toTopOf="@+id/labelWillItRain"
-            tools:text="no" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textHourTemp"
+            tools:text="Time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -15,6 +15,22 @@ abstract class WeatherDao {
     @Query("SELECT * FROM WeatherQueryCached WHERE `query` = :query")
     abstract fun getWeatherByQuery(query: String): Flowable<WeatherQueryCachedSelector>
 
+    @Transaction
+    open fun insertWeatherFull(
+        weatherQueryCached: WeatherQueryCached,
+        conditionCached: List<ConditionCached>,
+        dayToHoursMap: Map<DayWeatherCached, List<HourWeatherCached>>
+    ) {
+        insertWeatherQuery(weatherQueryCached)
+        insertConditions(conditionCached)
+        dayToHoursMap.forEach { entry ->
+            val dayCached = entry.key
+            val dayCachedId = insertDayWeather(dayCached).toInt()
+            val mappedHoursWeather = entry.value.map { it.copy(dayId = dayCachedId) }
+            insertHoursWeather(mappedHoursWeather)
+        }
+    }
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertWeatherQuery(weatherQueryCached: WeatherQueryCached)
 

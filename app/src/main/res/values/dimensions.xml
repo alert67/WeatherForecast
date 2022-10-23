@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_very_low">
-        8dp
+        4dp
     </dimen>
     <dimen name="margin_low">
+        8dp
+    </dimen>
+    <dimen name="margin_standard">
         12dp
     </dimen>
-    <dimen name="margin_normal">
+    <dimen name="margin_high">
         24dp
     </dimen>
-    <dimen name="margin_high">
+    <dimen name="margin_very_high">
         36dp
     </dimen>
 

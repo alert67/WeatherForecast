@@ -1,5 +1,6 @@
 package com.mateuszkukiel.weatherforecast.features.weather.data.repository
 
+import androidx.room.Transaction
 import com.mateuszkukiel.core.api.WeatherApi
 import com.mateuszkukiel.core.exception.ErrorWrapper
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.WeatherDao
@@ -42,11 +43,8 @@ class WeatherRepositoryImpl @Inject constructor(
 
     private fun insertWeatherToLocal(weatherQuery: WeatherQuery): Completable {
         return Completable.fromAction {
-            //insert weather query
             val weatherQueryCached = WeatherQueryCached(weatherQuery)
-            weatherDao.insertWeatherQuery(weatherQueryCached)
 
-            //insert conditions
             val conditionsCached: MutableList<ConditionCached> = mutableListOf()
             conditionsCached.addAll(weatherQuery.daysWeather.map { ConditionCached(it.condition) })
             conditionsCached.addAll(weatherQuery.daysWeather.flatMap { day ->
@@ -56,15 +54,19 @@ class WeatherRepositoryImpl @Inject constructor(
                     )
                 }
             })
-            weatherDao.insertConditions(conditionsCached.toSet().toList())
 
-            // insert days with hours
-            weatherQuery.daysWeather.forEach { day ->
-                val dayCached = DayWeatherCached(weatherQuery.query, day)
-                val dayCachedRoomId = weatherDao.insertDayWeather(dayCached).toInt()
-                val hoursCached = day.hoursWeather.map { HourWeatherCached(dayCachedRoomId, it) }
-                weatherDao.insertHoursWeather(hoursCached)
-            }
+            val dayToHoursMap = weatherQuery.daysWeather.map { day ->
+                DayWeatherCached(
+                    weatherQuery.query,
+                    day
+                ) to day.hoursWeather.map { hour -> HourWeatherCached(0, hour) }
+            }.toMap()
+
+            weatherDao.insertWeatherFull(
+                weatherQueryCached,
+                conditionsCached.toSet().toList(),
+                dayToHoursMap
+            )
         }
     }
 }

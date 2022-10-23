@@ -5,13 +5,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.HourWeather
 
-class HourListAdapter : ListAdapter<HourWeather, HourViewHolder>(HourDiffUtil()) {
+class HourWeatherListAdapter : ListAdapter<HourWeather, HourWeatherViewHolder>(HourDiffUtil()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
-        return HourViewHolder.inflate(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourWeatherViewHolder {
+        return HourWeatherViewHolder.inflate(parent)
     }
 
-    override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HourWeatherViewHolder, position: Int) {
         getItem(position)?.let { hour ->
             holder.bind(hour)
         }
