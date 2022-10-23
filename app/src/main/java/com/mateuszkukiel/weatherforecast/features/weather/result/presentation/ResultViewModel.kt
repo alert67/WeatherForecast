@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.mateuszkukiel.core.base.BaseViewModel
 import com.mateuszkukiel.core.base.UiState
 import com.mateuszkukiel.core.exception.ErrorMapper
 import com.mateuszkukiel.weatherforecast.features.weather.domain.GetWeatherForecastUseCase
@@ -12,6 +13,7 @@ import com.mateuszkukiel.weatherforecast.features.weather.domain.RefreshWeatherF
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Weather
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class ResultViewModel @Inject constructor(
     private val getWeatherForecastUseCase: GetWeatherForecastUseCase,
     private val refreshWeatherForecastUseCase: RefreshWeatherForecastUseCase,
     private val errorMapper: ErrorMapper,
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel() {
 
     private var query: String = ""
 
@@ -57,7 +59,7 @@ class ResultViewModel @Inject constructor(
                     _uiState.value = UiState.Idle
                     _errorMessage.value = errorMapper.map(it)
                 }
-            )
+            ).addTo(disposables)
     }
 
     private fun getWeatherForecast(query: String) {
@@ -65,6 +67,6 @@ class ResultViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy { weather ->
                 _weather.value = weather
-            }
+            }.addTo(disposables)
     }
 }
