@@ -4,14 +4,18 @@ import com.google.gson.annotations.SerializedName
 import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Condition
 
 data class ConditionRemote(
-    @SerializedName("text") val text: String,
-    @SerializedName("icon") val icon: String,
-    @SerializedName("code") val code: Int
+    @SerializedName("code")
+    val code: Int,
+    @SerializedName("icon")
+    val icon: String,
+    @SerializedName("text")
+    val text: String
 ) {
-    fun toCondition() = Condition(
-        text = text,
-        icon = icon
-    )
-
     companion object
+
+    fun toCondition() = Condition(
+        id = code,
+        icon = icon,
+        text = text
+    )
 }

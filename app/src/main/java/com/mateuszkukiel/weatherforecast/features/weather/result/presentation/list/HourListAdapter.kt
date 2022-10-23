@@ -3,9 +3,9 @@ package com.mateuszkukiel.weatherforecast.features.weather.result.presentation.l
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Hour
+import com.mateuszkukiel.weatherforecast.features.weather.domain.model.HourWeather
 
-class HourListAdapter : ListAdapter<Hour, HourViewHolder>(HourDiffUtil()) {
+class HourListAdapter : ListAdapter<HourWeather, HourViewHolder>(HourDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
         return HourViewHolder.inflate(parent)
@@ -17,13 +17,13 @@ class HourListAdapter : ListAdapter<Hour, HourViewHolder>(HourDiffUtil()) {
         }
     }
 
-    class HourDiffUtil : DiffUtil.ItemCallback<Hour>() {
+    class HourDiffUtil : DiffUtil.ItemCallback<HourWeather>() {
 
-        override fun areItemsTheSame(oldItem: Hour, newItem: Hour): Boolean {
+        override fun areItemsTheSame(oldItem: HourWeather, newItem: HourWeather): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
 
-        override fun areContentsTheSame(oldItem: Hour, newItem: Hour): Boolean {
+        override fun areContentsTheSame(oldItem: HourWeather, newItem: HourWeather): Boolean {
             return oldItem == newItem
         }
     }

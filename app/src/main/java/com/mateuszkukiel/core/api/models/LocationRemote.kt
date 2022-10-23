@@ -1,7 +1,6 @@
 package com.mateuszkukiel.core.api.models
 
 import com.google.gson.annotations.SerializedName
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.Location
 
 data class LocationRemote(
     @SerializedName("name") val name: String,
@@ -13,12 +12,6 @@ data class LocationRemote(
     @SerializedName("localtime_epoch") val localtimeEpoch: Int,
     @SerializedName("localtime") val localtime: String
 ) {
-    fun toLocation() = Location(
-        name = name,
-        country = country,
-        lat = lat,
-        lon = lon
-    )
 
     companion object
 }
