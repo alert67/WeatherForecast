@@ -9,6 +9,7 @@ class ErrorMapperImpl(private val context: Context) : ErrorMapper {
         return when (throwable) {
             is ServerException -> mapServerException(throwable)
             is NoInternetConnection -> getMessage(R.string.error_no_internet_connection)
+            is SearchQueryValidationException -> mapSearchQueryException(throwable)
             else -> getMessage(R.string.error_unknown)
         }
     }
@@ -18,6 +19,14 @@ class ErrorMapperImpl(private val context: Context) : ErrorMapper {
             is ServerException.Internal -> getMessage(R.string.error_internal)
             is ServerException.BadRequest -> getMessage(R.string.error_bad_request)
             else -> getMessage(R.string.error_unknown)
+        }
+    }
+
+    private fun mapSearchQueryException(exception: SearchQueryValidationException): String {
+        return when(exception) {
+            is SearchQueryValidationException.MinimumLengthIs3 -> getMessage(R.string.error_search_query_minimum_length_is_3)
+            is SearchQueryValidationException.QueryIsEmpty -> getMessage(R.string.error_search_query_is_empty)
+            is SearchQueryValidationException.QueryNotMatch -> getMessage(R.string.error_search_query_not_match)
         }
     }
 

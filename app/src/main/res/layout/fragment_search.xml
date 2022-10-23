@@ -16,7 +16,7 @@
         android:textColor="?android:textColorPrimary"
         android:text="@string/search_label_title"
         android:textSize="@dimen/font_large"
-        app:layout_constraintBottom_toTopOf="@+id/searchField"
+        app:layout_constraintBottom_toTopOf="@+id/textInputSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:text="@string/search_label_instruction"
         android:textColor="?android:textColorSecondary"
         android:textSize="@dimen/font_normal"
-        app:layout_constraintBottom_toTopOf="@+id/searchField"
+        app:layout_constraintBottom_toTopOf="@+id/textInputSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/searchField"
+        android:id="@+id/textInputSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
@@ -58,6 +58,9 @@
         app:layout_constraintTop_toBottomOf="@+id/labelSearchInstruction">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextSearch"
+            android:maxLines="1"
+            android:maxLength="30"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -74,5 +77,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchField" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputSearch" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:elevation="3dp"
+        android:indeterminateTint="?attr/colorOnPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/nextButton"
+        app:layout_constraintEnd_toEndOf="@+id/nextButton"
+        app:layout_constraintStart_toStartOf="@+id/nextButton"
+        app:layout_constraintTop_toTopOf="@+id/nextButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

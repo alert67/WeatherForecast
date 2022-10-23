@@ -9,6 +9,10 @@
     <string name="error_bad_request">Result not found. Please check input parameters.</string>
     <string name="error_no_internet_connection">Check your internet connection and try again.</string>
     <string name="error_unknown">Ops… Something went wrong</string>
+    <string name="error_search_query_minimum_length_is_3">Minimum length is 3</string>
+    <string name="error_search_query_is_empty">Query is empty</string>
+    <string name="error_search_query_not_match">Query not match any city, coordinates, US zip code or has invalid characters</string>
+
     <string name="colon">:</string>
     <string name="item_hour_location_will_it_rain_label">Will it rain:</string>
     <string name="yes">Yes</string>
