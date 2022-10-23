@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -11,40 +12,51 @@ import com.mateuszkukiel.core.base.viewBinding
 import com.mateuszkukiel.weatherforecast.R
 import com.mateuszkukiel.weatherforecast.databinding.FragmentSearchBinding
 import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.ResultFragment
+import com.mateuszkukiel.weatherforecast.features.weather.search.presentation.model.SearchViewActions
+import com.mateuszkukiel.weatherforecast.features.weather.search.presentation.model.SearchViewEvents
+import com.mateuszkukiel.weatherforecast.features.weather.search.presentation.model.SearchViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
-
     private val binding: FragmentSearchBinding by viewBinding(FragmentSearchBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.searchField.editText?.doAfterTextChanged { editable ->
-            viewModel.validateInputAndSetQuery(editable.toString())
+        binding.editTextSearch.doAfterTextChanged { editable ->
+            viewModel.onAction(SearchViewActions.OnSetQuery(editable.toString()))
         }
         binding.nextButton.setOnClickListener {
-            goToResultFragment()
+            viewModel.onAction(SearchViewActions.OnNextButtonClicked)
         }
-        binding.searchField.editText?.setText(viewModel.query)
-
         observeViewModel()
     }
 
     private fun observeViewModel() {
-        viewModel.isQueryValid.observe(viewLifecycleOwner) { isValid ->
-            binding.nextButton.isEnabled = isValid
+        viewModel.viewState.observe(viewLifecycleOwner) { state ->
+            bind(state)
+        }
+        viewModel.viewEvents.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                is SearchViewEvents.GoToResultScreen -> goToResultFragment(event.query)
+            }
         }
     }
 
-    private fun goToResultFragment() {
-        val searchQuery = binding.searchField.editText?.text.toString()
+    private fun bind(state: SearchViewState) {
+        binding.nextButton.isEnabled = state.isNextButtonEnabled
+        binding.textInputSearch.error = state.searchQueryError
+        binding.progressBar.isVisible = state.isLoading
+        binding.nextButton.text = if (state.isLoading) "" else getString(R.string.next)
+    }
+
+    private fun goToResultFragment(query: String) {
         findNavController().navigate(
             R.id.action_SearchFragment_to_ResultFragment,
-            bundleOf(ResultFragment.BUNDLE_SEARCH_QUERY_KEY to searchQuery)
+            bundleOf(ResultFragment.BUNDLE_SEARCH_QUERY_KEY to query)
         )
     }
 }
