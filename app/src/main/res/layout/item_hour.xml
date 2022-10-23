@@ -17,23 +17,24 @@
             android:id="@+id/imageHour"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginTop="@dimen/margin_high"
+            android:layout_marginTop="@dimen/margin_low"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLocalTime"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/textHourTemp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_low"
+            android:layout_marginBottom="@dimen/margin_high"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/font_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/imageHour"
             app:layout_constraintStart_toStartOf="@+id/imageHour"
             app:layout_constraintTop_toBottomOf="@+id/imageHour"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="22°C" />
 
 
@@ -41,13 +42,12 @@
             android:id="@+id/textLocalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_high"
+            android:layout_marginTop="@dimen/margin_high"
             android:textColor="?android:textColorPrimary"
             android:textSize="@dimen/font_normal"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textHourTemp"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

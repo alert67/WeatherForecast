@@ -30,7 +30,8 @@ class DayWeatherViewHolder(private val binding: ItemDayWeatherBinding) :
     }
 
     fun bind(dayWeather: DayWeather) {
-        binding.textDayTemp.text = dayWeather.tempC.toString() + "°C"
+        val temp = dayWeather.tempC.toString() + "°C"
+        binding.textDayTemp.text = temp
         binding.textDayDate.text = dayWeather.localTime
         (binding.recyclerViewHours.adapter as? HourWeatherListAdapter)?.submitList(dayWeather.hoursWeather)
     }
