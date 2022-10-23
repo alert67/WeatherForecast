@@ -62,7 +62,8 @@ internal class WeatherQueryCachedSelectorRepositoryImplTest {
         val weatherResponse = WeatherResponse.mock()
         val weatherQuery = weatherResponse.toLocationQuery(query)
 
-        val weatherCached = WeatherQueryCached(weatherQuery)
+        val weatherQueryCached = WeatherQueryCached(weatherQuery)
+
         val conditionsCached: MutableList<ConditionCached> = mutableListOf()
         conditionsCached.addAll(weatherQuery.daysWeather.map { ConditionCached(it.condition) })
         conditionsCached.addAll(weatherQuery.daysWeather.flatMap { day ->
@@ -72,34 +73,19 @@ internal class WeatherQueryCachedSelectorRepositoryImplTest {
                 )
             }
         })
-        val daysCached = weatherQuery.daysWeather.map { DayWeatherCached(query, it) }
-        val hoursCached = weatherQuery.daysWeather.flatMap { day ->
-            day.hoursWeather.map {
-                HourWeatherCached(
-                    2,
-                    it
-                )
-            }
-        }
+
+        val dayToHoursMap = weatherQuery.daysWeather.map { day ->
+            DayWeatherCached(
+                weatherQuery.query,
+                day
+            ) to day.hoursWeather.map { hour -> HourWeatherCached(0, hour) }
+        }.toMap()
 
         val api = mockk<WeatherApi> {
             every { getForecast(query) } returns Single.just(weatherResponse)
         }
         val dao = mockk<WeatherDao>(relaxUnitFun = true) {
-            every {
-                insertWeatherQuery(
-                    weatherQueryCached = weatherCached
-                )
-            } returns Unit
-            every {
-                insertConditions(conditionsCached.toSet().toList())
-            } returns Unit
-            every {
-                insertDayWeather(daysCached.first())
-            } returns 0
-            every {
-                insertHoursWeather(hoursCached)
-            } returns Unit
+            insertWeatherFull(weatherQueryCached, conditionsCached, dayToHoursMap)
         }
         val errorWrapper = mockk<ErrorWrapper> {
             every { wrap(Throwable()) } returns Throwable()
@@ -111,7 +97,7 @@ internal class WeatherQueryCachedSelectorRepositoryImplTest {
 
         //then
         verify { api.getForecast(query) }
-        verify { dao.insertWeatherQuery(weatherCached) }
+        verify { dao.insertWeatherFull(weatherQueryCached, conditionsCached, dayToHoursMap) }
         testObserver.hasSubscription()
         testObserver.assertComplete()
         testObserver.assertNoErrors()
