@@ -1,6 +1,6 @@
 # WeatherForecast
 
-##About
+## About
 Simple weather application to evalute my android skills.
 
 ## Installation guide
