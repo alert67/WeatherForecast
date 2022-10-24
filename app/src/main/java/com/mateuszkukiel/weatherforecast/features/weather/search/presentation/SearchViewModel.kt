@@ -60,30 +60,38 @@ class SearchViewModel @Inject constructor(
     private fun observeQueryQueue() {
         queryQueue
             .flatMap {
-                _viewState.value = _viewState.value!!.copy(searchQuery = it, isLoading = true, isNextButtonEnabled = false)
+                _viewState.value?.let { state ->
+                    _viewState.value =
+                        state.copy(searchQuery = it, isLoading = true, isNextButtonEnabled = false)
+                }
                 Observable.just(it)
             }
             .observeOn(Schedulers.io())
             .debounce(300, TimeUnit.MILLISECONDS)
             .flatMap {
-                searchQueryUseCase(it).toObservable().materialize().filter { notification -> !notification.isOnComplete }
+                searchQueryUseCase(it).toObservable().materialize()
+                    .filter { notification -> !notification.isOnComplete }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onNext = { notification ->
                     val isValid = notification.value == true
-                    _viewState.value = _viewState.value!!.copy(
-                        isLoading = false,
-                        isNextButtonEnabled = isValid,
-                        searchQueryError = notification.error?.let { errorMapper.map(it) }
-                    )
+                    _viewState.value?.let { state ->
+                        _viewState.value = state.copy(
+                            isLoading = false,
+                            isNextButtonEnabled = isValid,
+                            searchQueryError = notification.error?.let { errorMapper.map(it) }
+                        )
+                    }
                 },
                 onError = { error ->
-                    _viewState.value = _viewState.value!!.copy(
-                        isLoading = false,
-                        isNextButtonEnabled = false,
-                        searchQueryError = errorMapper.map(error)
-                    )
+                    _viewState.value?.let { state ->
+                        _viewState.value = state.copy(
+                            isLoading = false,
+                            isNextButtonEnabled = false,
+                            searchQueryError = errorMapper.map(error)
+                        )
+                    }
                 }
             ).addTo(disposables)
     }

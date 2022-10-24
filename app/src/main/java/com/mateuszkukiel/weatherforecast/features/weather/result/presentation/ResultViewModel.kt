@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.hadilq.liveevent.LiveEvent
 import com.mateuszkukiel.core.base.BaseViewModel
-import com.mateuszkukiel.core.base.UiState
 import com.mateuszkukiel.core.exception.ErrorMapper
 import com.mateuszkukiel.weatherforecast.features.weather.domain.GetWeatherForecastUseCase
 import com.mateuszkukiel.weatherforecast.features.weather.domain.RefreshWeatherForecastUseCase
-import com.mateuszkukiel.weatherforecast.features.weather.domain.model.WeatherQuery
+import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.model.ResultViewAction
+import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.model.ResultViewEvents
+import com.mateuszkukiel.weatherforecast.features.weather.result.presentation.model.ResultViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
@@ -26,14 +27,11 @@ class ResultViewModel @Inject constructor(
 
     private var query: String = ""
 
-    private val _uiState: MutableLiveData<UiState> = MutableLiveData(UiState.Idle)
-    val uiState: LiveData<UiState> = _uiState
+    private val _viewState: MutableLiveData<ResultViewState> = MutableLiveData(ResultViewState())
+    val viewState: LiveData<ResultViewState> = _viewState
 
-    private val _locationQuery: MutableLiveData<WeatherQuery> = MutableLiveData()
-    val locationQuery: LiveData<WeatherQuery> = _locationQuery
-
-    private val _errorMessage: LiveEvent<String> = LiveEvent()
-    val errorMessage: LiveData<String> = _errorMessage
+    private val _viewEvents: LiveEvent<ResultViewEvents> = LiveEvent()
+    val viewEvents: LiveData<ResultViewEvents> = _viewEvents
 
     init {
         savedStateHandle.get<String>(ResultFragment.BUNDLE_SEARCH_QUERY_KEY)?.let { query ->
@@ -43,29 +41,38 @@ class ResultViewModel @Inject constructor(
         }
     }
 
-    fun refreshData() {
-        refreshWeatherForecast(query)
+    fun onAction(action: ResultViewAction) {
+        when (action) {
+            ResultViewAction.OnPullToRefresh -> refreshWeatherForecast(query)
+        }
     }
 
     private fun refreshWeatherForecast(query: String) {
-        _uiState.value = UiState.Pending
-        refreshWeatherForecastUseCase.execute(query)
+        _viewState.value?.let { state -> _viewState.value = state.copy(isLoading = true) }
+        refreshWeatherForecastUseCase(query)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onComplete = {
-                    _uiState.value = UiState.Idle
+                    _viewState.value?.let { state ->
+                        _viewState.value = state.copy(isLoading = false, errorMessage = null)
+                    }
                 }, onError = {
-                    _uiState.value = UiState.Idle
-                    _errorMessage.value = errorMapper.map(it)
+                    val errorMessage = errorMapper.map(it)
+                    _viewState.value?.let { state ->
+                        _viewState.value = state.copy(isLoading = false, errorMessage = errorMessage)
+                    }
+                    _viewEvents.value = ResultViewEvents.ShowError(errorMessage)
                 }
             ).addTo(disposables)
     }
 
     private fun getWeatherForecast(query: String) {
-        getWeatherForecastUseCase.execute(query)
+        getWeatherForecastUseCase(query)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy { weather ->
-                _locationQuery.value = weather
+                _viewState.value?.let { state ->
+                    _viewState.value = state.copy(weatherQuery = weather)
+                }
             }.addTo(disposables)
     }
 }
