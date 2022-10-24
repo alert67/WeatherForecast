@@ -13,6 +13,12 @@ jobs:
       - name: Get Tag
         id: var
         run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        
+      - name: Access secrets
+        env:
+          APIKEY: ${{ secrets.APIKEY }}
+          APIURL: ${{ secrets.APIURL }}
+        run: echo -e "apiKey=$APIKEY\napiUrl=$APIURL"  > ./local.properties  
      
       - name: Build APK
         id: build
