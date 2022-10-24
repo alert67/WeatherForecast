@@ -12,7 +12,7 @@ jobs:
     
       - name: Get Tag
         id: var
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
      
       - name: Build APK
         id: build
