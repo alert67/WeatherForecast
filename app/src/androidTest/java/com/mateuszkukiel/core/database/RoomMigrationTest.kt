@@ -27,7 +27,7 @@ internal class RoomMigrationTest {
     @Test
     @Throws(IOException::class)
     fun migrateAll() {
-        helper.createDatabase(TEST_DB, 2).apply {
+        helper.createDatabase(TEST_DB, AppDatabase.DATABASE_VERSION).apply {
             close()
         }
 

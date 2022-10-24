@@ -9,10 +9,14 @@ import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.HourW
 import com.mateuszkukiel.weatherforecast.features.weather.data.local.model.WeatherQueryCached
 
 @Database(
-    version = 2,
+    version = AppDatabase.DATABASE_VERSION,
     entities = [WeatherQueryCached::class, DayWeatherCached::class, HourWeatherCached::class, ConditionCached::class],
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun weatherDao(): WeatherDao
+
+    companion object {
+        const val DATABASE_VERSION = 2
+    }
 }
