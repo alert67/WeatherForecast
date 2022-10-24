@@ -5,5 +5,5 @@ import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class GetWeatherForecastUseCase @Inject constructor(private val weatherRepository: WeatherRepository) {
-    fun execute(query: String): Observable<WeatherQuery> = weatherRepository.getWeather(query)
+    operator fun invoke(query: String): Observable<WeatherQuery> = weatherRepository.getWeather(query)
 }
